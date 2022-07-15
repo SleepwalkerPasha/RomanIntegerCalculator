@@ -36,38 +36,6 @@ public class Main {
         return -1;
     }
 
-    static boolean isRoman(String string){
-        int count = 0;
-        for (char c:string.toCharArray()) {
-            if (c == 'I'){
-                count++;
-            }
-            if (c == 'V'){
-                count++;
-            }
-            if (c == 'X'){
-                count++;
-            }
-            if (c == 'L'){
-                count++;
-            }
-            if (c == 'C'){
-                count++;
-            }
-            if (c == 'D'){
-                count++;
-            }
-            if (c == 'M'){
-                count++;
-            }
-        }
-        if (count == string.length() && !string.equals("")){
-            return true;
-        }else {
-            return false;
-        }
-    }
-
     static String intToRoman(int num){
         int[] values = {1000,900,500,400,100,90,50,40,10,9,5,4,1};
         String[] romanLetters = {"M","CM","D","CD","C","XC","L","XL","X","IX","V","IV","I"};
@@ -105,7 +73,9 @@ public class Main {
     static void valueCheck() throws Exception {
         countOfRomans = 0;
         for (String volume : volumes) {
-            if (isRoman(volume)){
+            Pattern pattern = Pattern.compile("^(?=[MDCLXVI])M*(C[MD]|D?C{0,3})(X[CL]|L?X{0,3})(I[XV]|V?I{0,3})$");
+            Matcher matcher = pattern.matcher(volume);
+            if (matcher.find()){
                 countOfRomans++;
             }
         }
