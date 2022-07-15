@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 public class Main {
     private static int countOfRomans;
 
-    private static String[] volumes;
+    private static ArrayList<String> inputVolumes;
     private static ArrayList<Integer> intVolumes;
 
     static int value(char c){
@@ -72,7 +72,7 @@ public class Main {
 
     static void valueCheck() throws Exception {
         countOfRomans = 0;
-        for (String volume : volumes) {
+        for (String volume : inputVolumes) {
             Pattern pattern = Pattern.compile("^(?=[MDCLXVI])M*(C[MD]|D?C{0,3})(X[CL]|L?X{0,3})(I[XV]|V?I{0,3})$");
             Matcher matcher = pattern.matcher(volume);
             if (matcher.find()){
@@ -80,13 +80,13 @@ public class Main {
             }
         }
         if (countOfRomans == 2){
-            for (String volume : volumes) {
+            for (String volume : inputVolumes) {
                 intVolumes.add(romanToInt(volume));
             }
         }else if (countOfRomans == 1){
             throw new Exception("используются одновременно разные системы счисления");
         } else {
-            for (String volume: volumes) {
+            for (String volume: inputVolumes) {
                 intVolumes.add(Integer.valueOf(volume));
             }
         }
@@ -94,7 +94,7 @@ public class Main {
 
     public static String calc(String input) throws Exception {
         input = input.replaceAll("\\s+","");
-        ArrayList<String> inputVolumes = new ArrayList<>();
+         inputVolumes = new ArrayList<>();
         Pattern pattern1 = Pattern.compile("[-]?[0-9]+");
         Matcher matcher1 = pattern1.matcher(input);
         String[] strings = input.split("[-+/*]");
@@ -118,9 +118,9 @@ public class Main {
         intVolumes = new ArrayList<>();
         int answer = 0;
         String strAnswer = null;
-        if (input.contains("+")){
-            volumes = input.split("[+]");
-            valueCheck();
+        valueCheck();
+        String operator = input.substring(inputVolumes.get(0).length(), inputVolumes.get(0).length() + 1);
+        if (operator.equals("+")){
             answer = intVolumes.get(0) + intVolumes.get(1);
             if (countOfRomans == 2) {
                 if (answer >= 0){
@@ -131,8 +131,7 @@ public class Main {
             }else {
                 strAnswer = String.valueOf(answer);
             }
-        }else if (input.contains("-")){
-            volumes = input.split("[-]");
+        }else if (operator.equals("-")){
             valueCheck();
             answer = intVolumes.get(0) - intVolumes.get(1);
             if (countOfRomans == 2) {
@@ -144,8 +143,7 @@ public class Main {
             }else {
                 strAnswer = String.valueOf(answer);
             }
-        }else if (input.contains("*")){
-            volumes = input.split("[*]");
+        }else if (operator.equals("*")){
             valueCheck();
             answer = intVolumes.get(0) * intVolumes.get(1);
             if (countOfRomans == 2) {
@@ -158,8 +156,7 @@ public class Main {
                 strAnswer = String.valueOf(answer);
             }
         }
-        else if (input.contains("/")){
-            volumes = input.split("[/]");
+        else if (operator.equals("/")){
             valueCheck();
             answer = intVolumes.get(0) / intVolumes.get(1);
             if (countOfRomans == 2) {
